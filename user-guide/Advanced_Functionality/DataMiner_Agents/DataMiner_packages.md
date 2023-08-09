@@ -26,18 +26,21 @@ The following types of DataMiner packages are available:
 
 Package containing all files necessary to upgrade a DataMiner Agent to a newer version.
 
-- This type of file is published on DCP by Skyline’s Quality Assurance Department.
+- This type of file is published on dataminer.services by Skyline’s Quality Assurance Department.
 
 - File extension: *.dmupgrade*
 
 > [!NOTE]
-> The maximum upload size of upgrade packages is limited depending on the DataMiner version, but it is possible to increase this limit. See [Increasing the maximum upload size for upgrade packages in a DMS](xref:SLNetClientTest_tool_advanced_procedures#increasing-the-maximum-upload-size-for-upgrade-packages-in-a-dms).
+> The maximum upload size of upgrade packages is limited depending on the DataMiner version, but it is possible to increase this limit. See [Increasing the maximum upload size for upgrade packages in a DMS](xref:SLNetClientTest_increasing_max_upload).
+
+> [!TIP]
+> See also: [Upgrade packages](xref:TOOUpgradePackageContent)
 
 ## Update package (.dmupdate)
 
 Package containing minor updates for an existing release. Update packages contain mostly bug fixes, but can also contain new features. The packages are very similar to upgrade packages, but they only contain the files that have changed compared to the base version for which they are an update.
 
-- This type of file is published on DCP by Skyline’s Quality Assurance Department.
+- This type of file is published on dataminer.services by Skyline’s Quality Assurance Department.
 
 - File extension: *.dmupdate*
 
@@ -58,8 +61,12 @@ Package containing all files necessary to install a particular DataMiner app on 
 - File extension: *.dmapp*
 
 > [!NOTE]
-> - These packages can be installed in the same way as a .dmupgrade package. See [Upgrading a DataMiner Agent using DataMiner Taskbar Utility](xref:Upgrading_a_DataMiner_Agent_using_DataMiner_Taskbar_Utility)*.*
+>
+> - These packages can be installed in the same way as a .dmupgrade package. See [Upgrading a DataMiner Agent using DataMiner Taskbar Utility](xref:Upgrading_a_DataMiner_Agent_using_DataMiner_Taskbar_Utility).
 > - .dmapp packages can also contain report templates, dashboards and aggregation rules.
+
+> [!TIP]
+> See also: [Application packages](xref:TOOApplicationPackages)
 
 ## Protocol package (.dmprotocol)
 

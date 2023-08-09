@@ -18,8 +18,6 @@ This section consists of the following topics:
 
 - [Working with reference lines](xref:Working_with_reference_lines)
 
-- [Working with frequency masks](xref:Working_with_frequency_masks)
-
 - [Using Spectrum Analysis presets](xref:Using_Spectrum_Analysis_presets)
 
 - [Working with trace recordings](xref:Working_with_trace_recordings)
@@ -28,6 +26,6 @@ This section consists of the following topics:
 
 > [!TIP]
 > See also:
-> - <https://community.dataminer.services/video/spectrum-analyzer-introduction-to-dataminer-spectrum-analysis/>
-> - <https://community.dataminer.services/video/spectrum-analyzer-real-time-spectrum-analysis-tools/>
 >
+> - [Spectrum Analyzer – Introduction to DataMiner Spectrum Analysis](https://community.dataminer.services/video/spectrum-analyzer-introduction-to-dataminer-spectrum-analysis/) ![Video](~/user-guide/images/video_Duo.png)
+> - [Spectrum Analyzer – Real-time Spectrum Analysis tools](https://community.dataminer.services/video/spectrum-analyzer-real-time-spectrum-analysis-tools/) ![Video](~/user-guide/images/video_Duo.png)

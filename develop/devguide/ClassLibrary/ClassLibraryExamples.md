@@ -12,7 +12,7 @@ The following example creates a new element and then waits until the element is 
 /// <summary>
 /// The QAction entry point.
 /// </summary>
-/// <param name="protocol">Link with SLProtocol process.</param>
+/// <param name="slProtocol">Link with SLProtocol process.</param>
 public static void Run(SLProtocol slProtocol)
 {
     try
@@ -59,16 +59,13 @@ private static IDmsElement GetElementAfterStartupComplete(SLProtocol protocol, I
 {
     if (timeout.TotalMinutes > 5)
     {
-        throw new ArgumentException("Timeout too big.", "timeout");
+        throw new ArgumentException("Timeout too big.", nameof(timeout));
     }
 
     if (interval.TotalMinutes > 1)
     {
-        throw new ArgumentException("Interval too big.", "timeout");
+        throw new ArgumentException("Interval too big.", nameof(interval));
     }
-
-    int timeoutMs = Convert.ToInt32(timeout.TotalMilliseconds);
-    int intervalMs = Convert.ToInt32(interval.TotalMilliseconds);
 
     IDmsElement element = null;
 
@@ -78,7 +75,7 @@ private static IDmsElement GetElementAfterStartupComplete(SLProtocol protocol, I
 
     bool elementIsKnownInSLNet = false;
 
-    while (!elementIsKnownInSLNet && sw.ElapsedMilliseconds <= timeoutMs)
+    while (!elementIsKnownInSLNet && sw.Elapsed <= timeout)
     {
         try
         {
@@ -87,19 +84,19 @@ private static IDmsElement GetElementAfterStartupComplete(SLProtocol protocol, I
         }
         catch (ElementNotFoundException)
         {
-            Thread.Sleep(intervalMs);
+            Thread.Sleep(interval);
         }
     }
 
     bool elementStartupComplete = false;
 
-    while (!elementStartupComplete && sw.ElapsedMilliseconds <= timeoutMs)
+    while (!elementStartupComplete && sw.Elapsed <= timeout)
     {
         elementStartupComplete = element.IsStartupComplete();
 
         if (!elementStartupComplete)
         {
-            Thread.Sleep(intervalMs);
+            Thread.Sleep(interval);
         }
     }
 
@@ -169,7 +166,7 @@ AgentState state = agent.State;
 
 ## Creating, updating and retrieving HTTP connections of elements
 
-In version 1.2.0.5 of the class library, support has been added for HTTP connections of elements (virtual and SNMP connections were already supported in previous versions). The following diagram gives an overview of the provided interfaces:
+The following diagram gives an overview of the provided interfaces:
 
 ![alt text](../../images/classlibrary1205_1.png "Connections class diagram")
 
@@ -232,7 +229,7 @@ private static void SetPort(SLProtocol protocol)
 
 ## Creating and deleting properties in a DataMiner System
 
-In version 1.2.0.5 of the class library, support has been added for creating and deleting element, view or service properties in a DataMiner System.
+Support has been added for creating and deleting element, view or service properties in a DataMiner System.
 
 The following example illustrates how to create an element property:
 

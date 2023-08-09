@@ -266,29 +266,29 @@ The provisioning part of the JSON contains all the information required to creat
 
 The *Configuration* section contains the following fields:
 
-| Field name               | Description                                                                                                                                                                                                  |
-|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| NameSchema               | The name of the element.                                                                                                                                                                                     |
-| Description              | The description of the element.                                                                                                                                                                              |
-| ProtocolName             | The name of the protocol. This is case sensitive.                                                                                                                                                            |
-| ProtocolVersion          | The version of the protocol. Use *Production* to indicate the production version of the protocol.                                                                             |
-| AlarmTemplate            | The name of the alarm template for the element.                                                                                                                                                              |
-| TrendTemplate            | The name of the trend template for the element.                                                                                                                                                              |
-| Ports                    | Allows you to configure all connections for the element (see [Ports](#ports))                                                                                                                                |
-| SlowPoll                 | Allows you to configure the slow poll settings for the element (see [Slowpoll](#slowpoll)).                                                                                                                  |
-| State                    | The state of the element should be in when it is created. Possible values are *Active*, *Stopped* and *Paused*. |
-| IsHidden                 | Set this field to *True* if you want the element to be hidden. Otherwise, set it to *False*.                                                   |
-| IsReadOnly               | Set this field to *True* if you want the element to be read-only. Otherwise, set it to *False*.                                                |
-| CreateDVEs               | Indicates whether DVEs should be created for the element                                                                                                                                                     |
-| Properties               | Allows you to configure all properties for the element (see [Properties](#properties))                                                                                                                       |
-| Type                     | Deprecated. Set this field to the Element Type specified in the protocol.                                                                                                                                    |
-| EnableTelnet             | Deprecated. Set this field to *False*.                                                                                                                                        |
-| ForceAgent               | Deprecated. Can be used on systems before 9.6.0. See [Linking an element to a fixed DMA: Force Agent](xref:Linking_an_element_to_a_fixed_DMA_Force_Agent).                               |
-| KeepOnline               | Deprecated. Set this field to *False*.                                                                                                                                        |
-| EnableSnmpAgent          | Deprecated. Set this field to *False*.                                                                                                                                        |
-| SnmpReadCommunityString  | Deprecated. Specify an empty string "".                                                                                                                                                                      |
-| SnmpWriteCommunityString | Deprecated. Specify an empty string "".                                                                                                                                                                      |
-| TimeoutTime              | Deprecated. Specify the integer value 0.                                                                                                                                                                     |
+| Field name | Description |
+|--|--|
+| NameSchema | The name of the element. |
+| Description | The description of the element. |
+| ProtocolName | The name of the protocol. This is case-sensitive. |
+| ProtocolVersion | The version of the protocol. Use *Production* to indicate the production version of the protocol. |
+| AlarmTemplate | The name of the alarm template for the element. |
+| TrendTemplate | The name of the trend template for the element. |
+| Ports | Allows you to configure all connections for the element (see [Ports](#ports)) |
+| SlowPoll | Allows you to configure the slow poll settings for the element (see [Slowpoll](#slowpoll)). |
+| State | The state of the element should be in when it is created. Possible values are *Active*, *Stopped* and *Paused*. |
+| IsHidden | Set this field to *True* if you want the element to be hidden. Otherwise, set it to *False*. |
+| IsReadOnly | Set this field to *True* if you want the element to be read-only. Otherwise, set it to *False*. |
+| CreateDVEs | Indicates whether DVEs should be created for the element |
+| Properties | Allows you to configure all properties for the element (see [Properties](#properties)) |
+| Type | Deprecated. Set this field to the Element Type specified in the protocol. |
+| EnableTelnet | Deprecated. Set this field to *False*. |
+| ForceAgent | Deprecated. Can be used on systems before 9.6.0 to link elements to a fixed DMA in a Failover setup. |
+| KeepOnline | Deprecated. Set this field to *False*. |
+| EnableSnmpAgent | Deprecated. Set this field to *False*. |
+| SnmpReadCommunityString | Deprecated. Specify an empty string "". |
+| SnmpWriteCommunityString | Deprecated. Specify an empty string "". |
+| TimeoutTime | Deprecated. Specify the integer value 0. |
 
 #### Ports
 
@@ -340,13 +340,13 @@ For each connection, this section also has to contain one of the following array
 
     - **DeviceAddress**: Contains the device address and can be relevant for specific protocols. For example, for an HTTP connection, this field could contain *bypassproxy*.
 
-    - **PortID**: Indicates the order of the connection in the element. The first connection in the element needs to be assigned value 1, the second connection needs to have value 2, etc. You can easily verify the order of the connections by editing or creating an element using the protocol in question (see [Adding and deleting elements](xref:Adding_and_deleting_elements)).
+    - **PortID**: Indicates the order of the connection in the element. The first connection in the element needs to be assigned value 1, the second connection needs to have value 2, etc. You can easily verify the order of the connections by editing or creating an element using the protocol in question (see [Adding elements](xref:Adding_elements)).
 
-    - **IsSslTlsEnabled**: Indicates whether SSL/TLS encryption should be enabled, similar to the SSL/TLS checkbox in the element editor in DataMiner Cube (see [Adding and deleting elements](xref:Adding_and_deleting_elements)). This is only relevant when *TypeConnection* is *Serial* or *SmartSerial* and *Type* is *IP*. This also requires DataMiner version 10.0.3 or higher. The default value is false.
+    - **IsSslTlsEnabled**: Indicates whether SSL/TLS encryption should be enabled, similar to the SSL/TLS checkbox in the element editor in DataMiner Cube (see [Adding elements](xref:Adding_elements)). This is only relevant when *TypeConnection* is *Serial* or *SmartSerial* and *Type* is *IP*. This also requires DataMiner version 10.0.3 or higher. The default value is false.
 
     - **IsServerModeEnabled**: If this is set to true, the accepted IP addresses (cf. below) can be configured. Otherwise, this is not possible. This boolean is only relevant if *TypeConnection* is *SmartSerial*, *Type* is *IP* and the IP address is "any" or "127.0.0.1".
 
-    - **AcceptedIpAddresses**: Represents the accepted IP addresses. Only relevant if *IsServerModeEnabled* is *true*. Allows you to specify one or more allowed IP addresses for the connection. The element will then only communicate with those IP addresses. This serves the same purpose as the *Accepted IP address* field in the element editor in DataMiner Cube (see [Adding and deleting elements](xref:Adding_and_deleting_elements)).
+    - **AcceptedIpAddresses**: Represents the accepted IP addresses. Only relevant if *IsServerModeEnabled* is *true*. Allows you to specify one or more allowed IP addresses for the connection. The element will then only communicate with those IP addresses. This serves the same purpose as the *Accepted IP address* field in the element editor in DataMiner Cube (see [Adding elements](xref:Adding_elements)).
 
     Below is an example of four connections that are required to create an element.
 
@@ -447,7 +447,7 @@ For each connection, this section also has to contain one of the following array
 
     - **PortNumber**: Allows you to specify the port number of the device (e.g. 161, 80, etc.).
 
-    - **PortID**: Indicates the order of the connection in the element. The first connection in the element needs to be assigned value 1, the second connection needs to have value 2, etc. You can easily verify the order of the connections by editing or creating an element using the protocol in question (see [Adding and deleting elements](xref:Adding_and_deleting_elements)).
+    - **PortID**: Indicates the order of the connection in the element. The first connection in the element needs to be assigned value 1, the second connection needs to have value 2, etc. You can easily verify the order of the connections by editing or creating an element using the protocol in question (see [Adding elements](xref:Adding_elements)).
 
     - **DeviceAddress**: Contains the device address, which can be relevant for specific protocols.
 
@@ -509,7 +509,7 @@ For each connection, this section also has to contain one of the following array
 
     - **PortNumber**: The port number of the device (e.g. 161, 80, etc.).
 
-    - **PortID**: Indicates the order of the connection in the element. The first connection in the element needs to be assigned value 1, the second connection needs to have value 2, etc. You can easily verify the order of the connections by editing or creating an element using the protocol in question (see [Adding and deleting elements](xref:Adding_and_deleting_elements)).
+    - **PortID**: Indicates the order of the connection in the element. The first connection in the element needs to be assigned value 1, the second connection needs to have value 2, etc. You can easily verify the order of the connections by editing or creating an element using the protocol in question (see [Adding elements](xref:Adding_elements)).
 
     Example:
 

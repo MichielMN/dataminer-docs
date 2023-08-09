@@ -20,7 +20,7 @@ This section consists of the following topics:
 
 > [!TIP]
 > See also:
-> <https://community.dataminer.services/video/spectrum-analyzer-about-presets-and-measurement-points/>
+> [Spectrum Analyzer – About presets and measurement points](https://community.dataminer.services/video/spectrum-analyzer-about-presets-and-measurement-points/) ![Video](~/user-guide/images/video_Duo.png)
 
 ## About presets
 
@@ -37,8 +37,6 @@ Spectrum Analysis presets can be used to reload settings, to reload a set of mar
 - Reference lines
 
 - Threshold information
-
-- Frequency mask information (in Element Display only)
 
 - Measurement cycles
 

@@ -4,6 +4,9 @@ uid: Placeholders_for_variables_in_shape_data_values
 
 # Placeholders for variables in shape data values
 
+> [!TIP]
+> For examples, see [Ziine](xref:ZiineDemoSystem) > *Visual Overview Design Examples* view > *Placeholders* page.
+
 ## Info keywords
 
 A number of keywords can be used in **Info** shape data fields to display information about a shape. These keywords, wrapped in square brackets, can also be used as placeholders in the value of shape data fields. For example:
@@ -18,12 +21,14 @@ From DataMiner 10.0.13 onwards, **Info** keywords (wrapped in square brackets) c
 For an overview of the different keywords, see [Making a shape display information about the item it is linked to](xref:Making_a_shape_display_information_about_the_item_it_is_linked_to).
 
 > [!NOTE]
+>
 > - To prevent infinite loops, do not use alarm keywords in shape data items of type **Alarm**.
 > - These keywords cannot be used inside other placeholders.
 
 ## Other placeholders
 
 > [!NOTE]
+>
 > - Placeholders are case-insensitive. In other words, you can use “\[this service\]”, “\[This Service\]”, etc.
 > - In the “\[param: ...\]” placeholders mentioned below, ParameterID can be replaced by another “\[param: ...\]” placeholder. In other words, parameter references can be nested. Using other placeholders within placeholders is supported from DataMiner 9.5.8 onwards. However, when you do so, be careful not to create loops.
 > - Using placeholders directly in the text of a shape is supported from DataMiner 9.5.8 onwards.
@@ -39,14 +44,14 @@ It can also be used with:
 
     > [!TIP]
     > See also:
+    >
     > - [Linking a shape to a trend component](xref:Linking_a_shape_to_a_trend_component)
     > - [Creating a parameter chart](xref:Creating_a_parameter_chart)
 
 - Shapes linked to a parameter summary, where it can be entered instead of a parameter in the **ParametersSummary** shape data field.
 
     > [!TIP]
-    > See also:
-    > [Linking a shape to a calculation involving multiple parameters](xref:Linking_a_shape_to_a_calculation_involving_multiple_parameters).
+    > See also: [Linking a shape to a calculation involving multiple parameters](xref:Linking_a_shape_to_a_calculation_involving_multiple_parameters)
 
 The placeholder takes the following arguments:
 
@@ -69,6 +74,7 @@ The placeholder takes the following arguments:
   > In case a discrete parameter is used for the remote primary key, do not use the display value.
 
 > [!NOTE]
+>
 > - Not all the values need to be filled in. If the view ID or the remote primary key are not filled in, these will automatically be replaced by -1. In the most extreme case, it is possible to configure the placeholder with only the aggregation rule name, if it is a rule in the root folder.
 > - Grouping can be defined either by element property or by view property. Within the same aggregation rule, it is not possible to group by both properties.
 > - Using other placeholders within this placeholder is only supported from DataMiner 9.5.0 onwards.
@@ -137,6 +143,17 @@ Reference to a session variable (scope: current DataMiner Cube card).
 
 As parameters of which the value is an empty string are considered initialized, you can use a \[var:...\] placeholders to refer to a parameter containing an empty string.
 
+### [color:severity=...]
+
+Available from DataMiner 10.1.11/10.2.0 onwards.
+
+The alarm color for a specific severity level.
+
+For example: `[color:severity=minor]`
+
+> [!TIP]
+> See also: [Setting the background color of a static shape](xref:Setting_the_background_color_of_a_static_shape)
+
 ### \[ConnectionLineDisplayIdx\]
 
 Display key of the connection that was clicked.
@@ -170,15 +187,20 @@ End point of the connection that was clicked.
 
 Available from DataMiner 9.6.7 onwards.
 
-The current DataMiner time.
+The current DataMiner time, refreshed every second.
 
 By default, the regional date/time format will be used. To use a different format, specify the format in the placeholder. For example:
 
-```txt
-[DataMinerTime:Format=HH:mm:ss]
-```
+| Format | Description |
+|--|--|
+| `[DataMinerTime:Format=HH:mm:ss]` | Custom format. |
+| `[DataMinerTime:Format=f]` | Full date/time pattern (short time). |
+| `[DataMinerTime:Format=g]` | General date/time pattern (short time). |
+| `[DataMinerTime:Format=F]` | Full date/time pattern (long time). |
+| `[DataMinerTime:Format=G]` | General date/time pattern (long time). |
 
-The time in the placeholder is refreshed every second.
+> [!NOTE]
+> For more information on possible formats, refer to <https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings>.
 
 ### \[DestinationInterfaceElementID\]
 
@@ -305,6 +327,7 @@ During the event, the \[Event:...\] placeholder will be replaced by the value of
   - Example: *\[event:NodeDoubleClicked,ID\]*
 
 > [!NOTE]
+>
 > - If you specify multiple \[Event:...\] placeholders in a shape data field, only one action will be triggered when that event occurs.
 > - It is advised not to insert \[Event:...\] placeholders in other dynamic parts or placeholders.
 
@@ -374,6 +397,7 @@ Reference to a parameter belonging to a specific element.
 The element can be specified either by its name or by its ID (DmaID/ElementID). If specified in a Visio file to be linked to a protocol, ElementID can be replaced by a “\*” wildcard.
 
 > [!NOTE]
+>
 > - As parameters of which the value is an empty string are considered initialized, you can use a \[param:...\] placeholders to refer to a parameter containing an empty string.
 > - Inside a \[param:...\] placeholder, you can use \[var:...\] placeholders to refer to session variables. Example: \[param:\[var:Element\],101\]
 
@@ -400,6 +424,7 @@ The element can be specified either by its name or by its ID (DmaID/ElementID). 
 TableRow - which can refer to either the primary key or the display key - can be a simple ID or name, but it can also be a string containing wildcards (“\*” or “?”) and/or placeholders like \[param:...\] or \[property:...\].
 
 > [!NOTE]
+>
 > - As parameters of which the value is an empty string are considered initialized, you can use a \[param:...\] placeholders to refer to a parameter containing an empty string.
 > - Inside a \[param:...\] placeholder, you can use \[var:...\] placeholders to refer to session variables. Example: \[param:\[var:Element\],101,5\]
 > - If you use this placeholder in the **Parameter** shape data field when linking a shape to a parameter, and the cell the placeholder refers to contains a parameter ID, instead of the cell value, the value of the parameter corresponding to that ID is displayed.
@@ -454,22 +479,34 @@ In this placeholder, specify three items, separated by commas:
 | y    | The input (e.g. a session variable).              |
 | z    | The string that will replace each of the matches. |
 
-Example:
-
-In case the *sessionvar* variable contains the value “*alpha\|beta\|gamma\|delta*”, you can place the following placeholder in the value of a shape data field:
-
-```txt
-[RegexReplace:(?<token>[^|]+)((?<separator>[|])|$),[var:sessionvar],value=1005 == ${token};]
-```
-
-The placeholder will then be replaced by the following string of text:
-
-```txt
-value=1005 == alpha;value=1005 == beta;value=1005 == gamma; value=1005 == delta;
-```
-
 > [!NOTE]
-> \[RegexReplace:x,y,z\] placeholders can be nested.
+>
+> - \[RegexReplace:x,y,z\] placeholders can be nested.
+> - If any of the three input items contains a comma, the separator needs to be replaced (see [About using separator characters](xref:Linking_a_shape_to_a_SET_command#about-using-separator-characters)):
+>
+>   ```txt
+>   [RegexReplace:[Sep:,#]x#y#z]
+>   ```
+
+Examples:
+
+- In case the *sessionvar* variable contains the value “*alpha\|beta\|gamma\|delta*”, you can place the following placeholder in the value of a shape data field:
+
+  ```txt
+  [RegexReplace:(?<token>[^|]+)((?<separator>[|])|$),[var:sessionvar],value=1005 == ${token};]
+  ```
+
+  The placeholder will then be replaced by the following string of text:
+
+  ```txt
+  value=1005 == alpha;value=1005 == beta;value=1005 == gamma; value=1005 == delta;
+  ```
+
+- You can use this placeholder to remove the unit suffix of a parameter, so that it can be used within the [Sum](#sumxyz) placeholder. This is necessary if the sum uses a [param](#paramdmaidelementidparameterid) placeholder and the value of the parameter includes a unit, to make sure that value can be parsed into an integer. For example, to remove the unit "Frames" and calculate the sum of the parameter with ID 5 and a fixed value of 17, you can use this placeholder:
+
+  ```txt
+  [sum:[RegexReplace:\sFrames$,[param:*,5],],17]
+  ```
 
 ### \[Reservation:...\]
 
@@ -586,6 +623,8 @@ This syntax consists of the following components:
     > - Prior to DataMiner 10.2.6/10.3.0, the *InUse* check is only performed when the visual overview is opened or when the resource itself is changed.
     > - Using the *InUse* placeholder may affect performance in case the system contains a large number of bookings.
 
+  - **ContributingBooking**: From DataMiner 10.3.0/10.2.11 onwards, you can specify *ContributingBooking* to retrieve the contributing booking ID of a resource.
+
 ### \[ServiceDefinition:\]
 
 Full syntax: *\[ServiceDefinition:*\<ServiceDefinitionID>*,*\<Property>*\]*
@@ -677,7 +716,7 @@ Use this placeholder in a shape data item of type **Tooltip** or in shape text. 
 
 Available from DataMiner 9.5.3 onwards.
 
-Use this placeholder in a shape data item of type **Tooltip** or in shape text. The tooltip or shape text will then display one particular service definition property, in the format “\<Property name>: \<Property value>”.
+Use this placeholder in a shape data item of type **Tooltip** or in shape text. The tooltip or shape text will then display the property value of the specified service definition property.
 
 - For a top-level element shape (i.e. not an interface shape), the property has to be one of the properties of the node specified in the service definition.
 
@@ -765,7 +804,20 @@ From DataMiner 9.6.8 onwards, this placeholder can be used to calculate datetime
 
     \[Subtract:23:33:15,00:03:15\]
 
-By default, datetime and time span values will be displayed in the regional date/time format. If you want such a value to be displayed in another format, then specify the format inside the placeholder, for example: *\[Subtract:23:33:15,00:03:15\|Format=HH:mm\]*
+By default, datetime and time span values will be displayed in the regional date/time format. If you want such a value to be displayed in another format, then specify the format inside the placeholder, for example: *\[Subtract:23:33:15,00:03:15\|Format=hh\:mm\]*.
+
+> [!NOTE]
+> For more info on possible formats, refer to <https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings>.
+
+From DataMiner 10.3.8/10.4.0 onwards, the subtract placeholder also supports numerics. Just like with time spans, you can subtract consecutive numbers from the first number.
+
+- Subtracting one number from another:
+
+    \[Subtract:10,3\]
+
+- Subtracting multiple numbers from the first number:
+
+    \[Subtract:10.1,3.3, 2.6\]
 
 ### \[Sum:X,Y,Z\]
 
@@ -848,6 +900,19 @@ It is possible to override the default behavior of this placeholder for child sh
 ### \[This EnhancedServiceID\]
 
 In a drawing linked to an enhanced service, you can refer to this service with this placeholder.
+
+### \[this reservationID\]
+
+From DataMiner 10.2.8/10.3.0 onwards, you can use this placeholder in shape data or shape text of shapes linked to a booking (e.g. dynamically generated shapes that represent bookings) to retrieve the GUID of the booking. The placeholder can also be nested, for example to retrieve booking properties or resources.
+
+For example:
+
+`[Resource:[reservation:[this reservationID],ResourceID|NodeID=18|],Name]`
+
+`[reservation:[this reservationID],Property=Monitoring]`
+
+> [!NOTE]
+> This placeholder is often used in combination with the shape data **Options** set to `AllowInheritance=False|ForcePropertyFromParent`. See [AllowInheritance=False](xref:Overview_of_page_and_shape_options#allowinheritancefalse) and [ForcePropertyFromParent](xref:Overview_of_page_and_shape_options#forcepropertyfromparent).
 
 ### \[this service\]
 

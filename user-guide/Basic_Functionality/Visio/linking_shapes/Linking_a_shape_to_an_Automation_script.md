@@ -7,7 +7,8 @@ uid: Linking_a_shape_to_an_Automation_script
 When a shape is linked to an Automation script, by default this script will be executed each time a user clicks that shape.
 
 > [!NOTE]
-> - For an example, see [Ziine](xref:ZiineDemoSystem) > *[Linking Shapes]* view > *[linking > EXE]* page.
+>
+> - For an example, see [Ziine](xref:ZiineDemoSystem) > *Operations* > *Other* > *Visual Overview Design Examples* view > *[linking > EXE]* page.
 > - Aside from the default **Execute** shape data, you can also use **OnClose** shape data to link to a script. See [Specifying a script to be executed when the page is closed](#specifying-a-script-to-be-executed-when-the-page-is-closed).
 
 To link a shape to an Automation script:
@@ -18,7 +19,7 @@ To link a shape to an Automation script:
   Script:ScriptName|DummyName=ElementName or DmaID/ElementID;...|ParameterName1=SingleValue;ParameterName2=#ValueFile;...| MemoryName=MemoryFileName;...|Tooltip|Options
   ```
 
-  - In the example above, two parameters are included. The first parameter is assigned a single value, and the second parameter is assigned a so-called permanent memory file (i.e. an array of values). Notice that, in the latter case, a hash character ("#") has to be placed in front of the name of the array.<br>See also: [Creating a memory file](xref:Script_variables#creating-a-memory-file)
+  - In the example above, two parameters are included. The first parameter is assigned a single value, and the second parameter is assigned a so-called permanent memory file (i.e. an array of values). Notice that, in the latter case, a hash character ("#") has to be placed in front of the name of the array. See also: [Creating a memory file](xref:Script_variables#creating-a-memory-file)
 
   - If you use the syntax above, make sure to always include 5 pipe characters ("\|"). If you do not need some parts of the syntax, e.g. because no memory files are used, just add nothing between those pipe characters.
 
@@ -39,6 +40,7 @@ To link a shape to an Automation script:
       | Execute          | Script:MyScript |
 
       > [!NOTE]
+      >
       > - If a script uses a parameter that has a memory file assigned to it, users can right-click the shape and select a value from the memory file. This way, the parameter can be set immediately, without confirmation.
       > - Up to DataMiner 9.0.4, it is not possible to execute an Automation script from Visual Overview if some values for the parameters still have to be entered by the operator.
 
@@ -146,15 +148,5 @@ In the **Execute** shape data value, you can use the following options (separate
 
 - **NoWait**: If an element used in the script is locked by another script being executed simultaneously, it will not wait until that element is unlocked. Instead, it will stop.
 
-- **SetTrigger=ValueChanged** or **Trigger=ValueChanged**: Available from DataMiner 10.2.0/10.1.1 onwards. Use this option to execute the script when a specific value changes. This is similar to the configuration to update parameters or session variables on session variable changes. See [Configuring a page to update parameters on session variable changes](xref:Configuring_a_page_to_update_parameters_on_session_variable_changes) or [Configuring a page to update a session variable when another session variable changes](xref:Configuring_a_page_to_update_a_session_variable_when_another_session_variable_changes).
-
-- **SetTrigger=Event** or **Trigger=Event**: Available from DataMiner 10.2.0/10.1.1 onwards. Use this option to execute the script when an event occurs on the open Visual Overview page.
-
-  For example, with the configuration below, double-clicking a node in an embedded service definition will trigger an Automation script that takes the node ID as a parameter.
-
-  | Shape data field | Value                                                                                                            |
-  | ---------------- | ---------------------------------------------------------------------------------------------------------------- |
-  | Execute          | Script:\<myScript>\|Parameters:IDParam=\[event:NodeDoubleClicked,ID\]\|Options:\<possibleOptions>\|Trigger=Event |
-
-  > [!TIP]
-  > See also: [\[Event:...\]](xref:Placeholders_for_variables_in_shape_data_values#event)
+> [!NOTE]
+> On page level, you can add an *Execute* shape data field with options to automatically trigger a script based on an event or value change. See [Configuring a page to execute a script automatically](xref:Configuring_a_page_to_execute_a_script_automatically)

@@ -1,9 +1,10 @@
-﻿using Skyline.DataMiner.Net;
-using Skyline.DataMiner.Net.Messages;
-using Skyline.DataMiner.Net.Automation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+
+using Skyline.DataMiner.Net;
+using Skyline.DataMiner.Net.Automation;
+using Skyline.DataMiner.Net.Messages;
 
 namespace Skyline.DataMiner.Scripting
 {
@@ -14,6 +15,7 @@ namespace Skyline.DataMiner.Scripting
 	/// <note type="note">SLProtocol is an interface from DMA 10.0.1 onwards (RN 23787). In earlier DataMiner versions, it is a concrete class.</note>
 	/// <para>All methods are blocking, except for the <see cref="SLProtocol.NotifyDataMinerQueued"/> method.</para>
 	/// <para>Many methods defined in this class also act as a wrapper for a specific <see cref="SLProtocol.NotifyProtocol"/>, <see cref="SLProtocol.NotifyDataMiner"/> or <see cref="SLProtocol.NotifyDataMinerQueued"/> method call. Using these methods is generally preferred over using the specific notify calls as this improves readability and type safety.</para>
+	/// <para>From DataMiner 10.2.9 onwards (RN 33965), the SLProtocol(Ext) object in QActions will retain all of its data members outside of the Run scope. This means that, while Notifies were already available out of scope earlier, members such as the QActionID will now also remain available when a QAction run ends. In addition, the SLNet connection can now be set up at any time.</para>
 	/// </remarks>
 	public interface SLProtocol
 	{
@@ -325,6 +327,9 @@ namespace Skyline.DataMiner.Scripting
 		///			<item>
 		///				<description>This call is to be used with columns of type "retrieved". In case other column types are present between the specified columns (e.g. columns of type "custom"), these other columns will be skipped.</description>
 		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
+		///			</item>
 		///		</list>
 		/// </remarks>
 		object FillArray(int tableID, List<object[]> rows, NotifyProtocol.SaveOption option, DateTime? timeInfo);
@@ -339,7 +344,7 @@ namespace Skyline.DataMiner.Scripting
 		/// <remarks>
 		///		<list type = "bullet">
 		///			<item>
-		///			<description>This overload is currently not supported.</description>
+		///			<description>This overload is supported from DataMiner 10.2.7 (RN 28573) onwards.</description>
 		///			</item>
 		///			<item>
 		///				<description>Prior to DataMiner 10.1.1 (RN 27995), this method was defined as an SLProtocol extension method in the NotifyProtocol class.</description>
@@ -355,6 +360,9 @@ namespace Skyline.DataMiner.Scripting
 		///			</item>
 		///			<item>
 		///				<description>This call is to be used with columns of type "retrieved". In case other column types are present between the specified columns (e.g. columns of type "custom"), these other columns will be skipped.</description>
+		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
 		///			</item>
 		///		</list>
 		/// </remarks>
@@ -383,6 +391,9 @@ namespace Skyline.DataMiner.Scripting
 		///			</item>
 		///			<item>
 		///				<description>This call is to be used with columns of type "retrieved". In case other column types are present between the specified columns (e.g. columns of type "custom"), these other columns will be skipped.</description>
+		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
 		///			</item>
 		///		</list>
 		/// </remarks>
@@ -424,7 +435,7 @@ namespace Skyline.DataMiner.Scripting
 		/// <remarks>
 		///		<list type = "bullet">
 		///			<item>
-		///			<description>This overload is currently not supported.</description>
+		///			<description>This overload is supported from DataMiner 10.2.7 onwards (RN 28573).</description>
 		///			</item>
 		///			<item>
 		///				<description>Prior to DataMiner 10.1.1 (RN 27995), this method was defined as an SLProtocol extension method in the NotifyProtocol class.</description>
@@ -481,7 +492,7 @@ namespace Skyline.DataMiner.Scripting
 		/// <remarks>
 		///		<list type = "bullet" >
 		///			<item>
-		///				<description>This overload is currently not supported.</description>
+		///				<description>This overload is supported from DataMiner 10.2.7 onwards (RN 28573).</description>
 		///			</item>
 		///			<item>
 		///				<description>Prior to DataMiner 10.1.1 (RN 27995), this method is defined as an SLProtocol extension method in the NotifyProtocol class.</description>
@@ -512,7 +523,7 @@ namespace Skyline.DataMiner.Scripting
 		/// <remarks>
 		///		<list type = "bullet" >
 		///			<item>
-		///				<description>This overload is currently not supported.</description>
+		///				<description>This overload is supported from DataMiner 10.2.7 onwards (RN 28573).</description>
 		///			</item>
 		///			<item>
 		///				<description>Prior to DataMiner 10.1.1 (RN 27995), this method is defined as an SLProtocol extension method in the NotifyProtocol class.</description>
@@ -528,6 +539,9 @@ namespace Skyline.DataMiner.Scripting
 		///			</item>
 		///			<item>
 		///				<description>This call is to be used with columns of type "retrieved". In case other column types are present between the specified columns (e.g. columns of type "custom"), these other columns will be skipped.</description>
+		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
 		///			</item>
 		///		</list>
 		/// </remarks>
@@ -557,6 +571,9 @@ namespace Skyline.DataMiner.Scripting
 		///			<item>
 		///				<description>This call is to be used with columns of type "retrieved". In case other column types are present between the specified columns (e.g. columns of type "custom"), these other columns will be skipped.</description>
 		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
+		///			</item>
 		///		</list>
 		/// </remarks>
 		object FillArrayNoDelete(int tableID, object[] columns, DateTime? timeInfo);
@@ -581,6 +598,9 @@ namespace Skyline.DataMiner.Scripting
 		///			</item>
 		///			<item>
 		///				<description>In case the values array only contains one value, this value will be used for all specified primary keys.</description>
+		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
 		///			</item>
 		///		</list>
 		/// </remarks>
@@ -702,6 +722,12 @@ namespace Skyline.DataMiner.Scripting
 		///			<item>
 		///				<description>The method SetParameter(int parameterID, object value, DateTime timestamp) acts a wrapper method for a NotifyProtocol type 256 <see href="xref:NT_SET_PARAMETER_WITH_HISTORY">NT_SET_PARAMETER_WITH_HISTORY</see> call.</description>
 		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
+		///			</item>
+		///			<item>
+		///				<description>A <see langword="null"/> value will not clear the parameter but keep its current value. To clear a parameter, see <see href="xref:LogicActionClear" />.</description>
+		///			</item>
 		///		</list>
 		///	</remarks>
 		///	<example>
@@ -745,6 +771,9 @@ namespace Skyline.DataMiner.Scripting
 		///			<item>
 		///				<description>In case multiple parameters need to be set, it is preferred to use a single SetParameters method call in order to reduce the inter-process communication between the SLScripting and SLProtocol processes.</description>
 		///			</item>
+		///			<item>
+		///				<description>A <see langword="null"/> value will not clear the parameter but keep its current value. To clear a parameter, see <see href="xref:LogicActionClear" />.</description>
+		///			</item>
 		///		</list>
 		///	</remarks>
 		///	<example>
@@ -765,6 +794,12 @@ namespace Skyline.DataMiner.Scripting
 		///		<list type = "bullet" >
 		///			<item>
 		///				<description>Feature introduced in DataMiner version 8.0.3.</description>
+		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of an entry in <paramref name="timeInfos"/> is unspecified, the timestamp entry will be handled as local time.</description>
+		///			</item>
+		///			<item>
+		///				<description>A <see langword="null"/> value will not clear the parameter but keep its current value. To clear a parameter, see <see href="xref:LogicActionClear" />.</description>
 		///			</item>
 		///		</list>
 		///	</remarks>
@@ -787,6 +822,9 @@ namespace Skyline.DataMiner.Scripting
 		///			<item>
 		///				<description>Introduced in DataMiner version 8.0.3.</description>
 		///			</item>
+		///			<item>
+		///				<description>A <see langword="null"/> value will not clear the parameter but keep its current value. To clear a parameter, see <see href="xref:LogicActionClear" />.</description>
+		///			</item>		
 		///		</list>
 		///	</remarks>
 		///	<example>
@@ -1331,6 +1369,9 @@ namespace Skyline.DataMiner.Scripting
 		///			<item>
 		///				<description>This method acts as a wrapper for a NotifyProtocol type 121 call ("NT_PUT_PARAMETER_INDEX"). See [NT_PUT_PARAMETER_INDEX (121)](xref:NT_PUT_PARAMETER_INDEX).</description>
 		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
+		///			</item>
 		///		</list>
 		///	</remarks>
 		///	<example>
@@ -1382,7 +1423,7 @@ namespace Skyline.DataMiner.Scripting
 		/// <remarks>
 		///		<list type = "bullet" >
 		///			<item>
-		///				<description>The SetParametersIndex method cannot be used to update a single cell. In case a single cell must be updated, use the SetParameterIndex method instead. In cases where you dynamically set a number of cells, make sure to check the number of cells that will need to be updated. In case multiple cells need to be updated, use the SetParametersIndex method. If a single cell needs to be updated use the SetParameterIndex method.</description>
+		///				<description>Prior to DataMiner 10.2.7 (RN 33198), the SetParametersIndex method cannot be used to update a single cell. In case a single cell must be updated, use the SetParameterIndex method instead. In cases where you dynamically set a number of cells, make sure to check the number of cells that will need to be updated. In case multiple cells need to be updated, use the SetParametersIndex method. If a single cell needs to be updated, use the SetParameterIndex method.</description>
 		///			</item>
 		///			<item>
 		///				<description>This method should only be used in case multiple distinct cells need to be set(e.g., cells in different tables). When appropriate, use the SetRow, FillArray, FillArrayNoDelete, NotifyProtocol type 220 call, etc.to set multiple cells belonging to the same row, column or table, respectively.</description>
@@ -1392,6 +1433,9 @@ namespace Skyline.DataMiner.Scripting
 		///			</item>
 		///			<item>
 		///				<description>Feature introduced in DataMiner version 8.0.3.</description>
+		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of an entry of <paramref name="timeInfos"/> is unspecified, the timestamp of that entry will be handled as local time.</description>
 		///			</item>
 		///		</list>
 		///	</remarks>
@@ -1408,7 +1452,7 @@ namespace Skyline.DataMiner.Scripting
 		/// <remarks>
 		///		<list type = "bullet" >
 		///			<item>
-		///				<description>The SetParametersIndex method cannot be used to update a single cell. In case a single cell must be updated, use the SetParameterIndex method instead. In cases where you dynamically set a number of cells, make sure to check the number of cells that will need to be updated. In case multiple cells need to be updated, use the SetParametersIndex method. If a single cell needs to be updated use the SetParameterIndex method.</description>
+		///				<description>Prior to DataMiner 10.2.7 (RN 33198), the SetParametersIndex method cannot be used to update a single cell. In case a single cell must be updated, use the SetParameterIndex method instead. In cases where you dynamically set a number of cells, make sure to check the number of cells that will need to be updated. In case multiple cells need to be updated, use the SetParametersIndex method. If a single cell needs to be updated, use the SetParameterIndex method.</description>
 		///			</item>
 		///			<item>
 		///				<description>This method should only be used in case multiple distinct cells need to be set(e.g., cells in different tables). When appropriate, use the SetRow, FillArray, FillArrayNoDelete, NotifyProtocol type 220 call, etc.to set multiple cells belonging to the same row, column or table, respectively.</description>
@@ -1509,6 +1553,9 @@ namespace Skyline.DataMiner.Scripting
 		///			<item>
 		///				<description>This method acts as a wrapper for a NotifyProtocol type 121 call ("NT_PUT_PARAMETER_INDEX"). See [NT_PUT_PARAMETER_INDEX (121)](xref:NT_PUT_PARAMETER_INDEX).</description>
 		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
+		///			</item>
 		///		</list>
 		///	</remarks>
 		///	<example>
@@ -1557,7 +1604,7 @@ namespace Skyline.DataMiner.Scripting
 		/// <remarks>
 		///		<list type = "bullet" >
 		///			<item>
-		///			<description>The SetParametersIndex method cannot be used to update a single cell. In case a single cell must be updated, use the SetParameterIndex method instead. In cases where you dynamically set a number of cells, make sure to check the number of cells that will need to be updated. In case multiple cells need to be updated, use the SetParametersIndex method. If a single cell needs to be updated use the SetParameterIndex method.</description>
+		///			<description>Prior to DataMiner 10.2.7 (RN 33198), the SetParametersIndexByKey method cannot be used to update a single cell. In case a single cell must be updated, use the SetParameterIndexByKey method instead. In cases where you dynamically set a number of cells, make sure to check the number of cells that will need to be updated. In case multiple cells need to be updated, use the SetParametersIndexByKey method. If a single cell needs to be updated, use the SetParameterIndexByKey method.</description>
 		///			</item>
 		///			<item>
 		///				<description>Feature introduced in DataMiner version 8.0.3.</description>
@@ -1567,6 +1614,9 @@ namespace Skyline.DataMiner.Scripting
 		///			</item>
 		///			<item>
 		///				<description>This method acts as a wrapper for a NotifyProtocol type 121 <see href="xref:NT_PUT_PARAMETER_INDEX">NT_PUT_PARAMETER_INDEX</see> call.</description>
+		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of an entry in <paramref name="timeInfos"/> is unspecified, the timestamp of that entry will be handled as local time.</description>
 		///			</item>
 		///		</list>
 		///	</remarks>
@@ -1583,7 +1633,7 @@ namespace Skyline.DataMiner.Scripting
 		/// <remarks>
 		///		<list type="bullet" >
 		///			<item>
-		///			<description>The SetParametersIndex method cannot be used to update a single cell. In case a single cell must be updated, use the SetParameterIndex method instead. In cases where you dynamically set a number of cells, make sure to check the number of cells that will need to be updated. In case multiple cells need to be updated, use the SetParametersIndex method. If a single cell needs to be updated use the SetParameterIndex method.</description>
+		///			<description>Prior to DataMiner 10.2.7 (RN 33198), the SLProtocol.SetParametersIndexByKey method cannot be used to update a single cell. In case a single cell must be updated, use the SetParameterIndexByKey method instead. In cases where you dynamically set a number of cells, make sure to check the number of cells that will need to be updated. In case multiple cells need to be updated, use the SetParametersIndexByKey method. If a single cell needs to be updated, use the SetParameterIndexByKey method.</description>
 		///			</item>
 		///			<item>
 		///				<description>Feature introduced in DataMiner version 8.0.3.</description>
@@ -1673,6 +1723,9 @@ namespace Skyline.DataMiner.Scripting
 		///			<item>
 		///				<description>A null reference as cell value will preserve the value of the cell.</description>
 		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
+		///			</item>
 		///		</list>
 		///	</remarks>
 		object SetRow(int iPID, int iRow, object row, ValueType timeInfo, [MarshalAs(UnmanagedType.U1)] bool bOverrideBehaviour);
@@ -1698,6 +1751,9 @@ namespace Skyline.DataMiner.Scripting
 		///			</item>
 		///			<item>
 		///				<description>A null reference as cell value will preserve the value of the cell.</description>
+		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
 		///			</item>
 		///		</list>
 		///	</remarks>
@@ -1777,6 +1833,9 @@ namespace Skyline.DataMiner.Scripting
 		///			<item>
 		///				<description>A null reference as cell value will preserve the value of the cell.</description>
 		///			</item>
+		///			<item>
+		///				<description>From DataMiner 10.2.9 onwards (RN 33849), if the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
+		///			</item>
 		///		</list>
 		///	</remarks>
 		object SetRow(int iPID, string key, object row, ValueType timeInfo, [MarshalAs(UnmanagedType.U1)] bool bOverrideBehaviour);
@@ -1802,6 +1861,9 @@ namespace Skyline.DataMiner.Scripting
 		///			</item>
 		///			<item>
 		///				<description>A null reference as cell value will preserve the value of the cell.</description>
+		///			</item>
+		///			<item>
+		///				<description>If the DateTime.Kind property of <paramref name="timeInfo"/> is unspecified, the timestamp will be handled as local time.</description>
 		///			</item>
 		///		</list>
 		///	</remarks>
@@ -2246,7 +2308,7 @@ namespace Skyline.DataMiner.Scripting
 		/// Determines whether the parameter with the specified ID has been initialized.
 		/// </summary>
 		/// <param name="iID">The ID of the parameter.</param>
-		/// <returns><c>true</c> if the value has been initialized; otherwise, <c>false</c>.</returns>
+		/// <returns><c>true</c> if the value has not been initialized; otherwise, <c>false</c>.</returns>
 		/// <remarks>
 		///		<list type = "bullet" >
 		///			<item>

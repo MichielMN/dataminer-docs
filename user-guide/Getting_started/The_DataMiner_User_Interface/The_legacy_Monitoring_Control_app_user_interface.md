@@ -9,15 +9,13 @@ Prior to DataMiner 10.0.0/10.0.2, the primary web application to monitor a DMS i
 The DataMiner Monitoring & Control app features a user interface similar to that of DataMiner Cube, with a header bar, a navigation pane, an Alarm Console and a card area.
 
 > [!CAUTION]
-> If you use a DataMiner version prior to DataMiner 10.1.7, we strongly advise to use HTTPS when you use DataMiner client applications over public internet. If you do not do so, all information – including logon credentials – is sent as plain, unencrypted text over the internet. From DataMiner 10.1.7 onwards, client-server communication is encrypted by default. See also: [Setting up HTTPS on a DMA](xref:Setting_up_HTTPS_on_a_DMA).
-
-> [!NOTE]
-> From DataMiner 9.0 onwards, the Monitoring & Control app is no longer compatible with Internet Explorer version 8 or lower.
+> If you use a DataMiner version prior to DataMiner 10.1.7, we strongly advise that you use HTTPS when you use DataMiner client applications over public internet. If you do not do so, all information – including logon credentials – is sent as plain, unencrypted text over the internet. From DataMiner 10.1.7 onwards, client-server communication is encrypted by default. See also: [Setting up HTTPS on a DMA](xref:Setting_up_HTTPS_on_a_DMA).
 
 > [!TIP]
 > See also:
+>
 > - [Accessing the legacy Monitoring & Control app](xref:Accessing_the_legacy_Monitoring_Control_app#accessing-the-legacy-monitoring--control-app)
-> - [DMS Mobile Gateway](xref:MobileGateway#dms-mobile-gateway)
+> - [Mobile Gateway](xref:MobileGateway)
 
 ## Monitoring & Control app header bar
 
@@ -66,7 +64,7 @@ The collapsible navigation pane contains a search box, as well as the following 
   Use this icon to access the legacy Reports & Dashboards module or the Trending module.
 
   - For more information on Reports & Dashboards, see [DMS Reporter](xref:reporter) and [DMS Dashboards](xref:dashboards).
-  
+
   - For more information on trending in the Monitoring & Control app, see [Monitoring & Control app trending](#monitoring--control-app-trending). |
 
 ## Monitoring & Control app Alarm Console
@@ -75,8 +73,8 @@ A collapsible Alarm Console pane at the bottom provides an overview of the alarm
 
 - The three default alarm tabs are displayed: active alarms, information events and masked alarms.
 
-    > [!NOTE]
-    > The information events displayed in the app are limited to events that occurred in the last 24 hours
+  > [!NOTE]
+  > The information events displayed in the app are limited to events that occurred in the last 24 hours
 
 - At the bottom, an alarm bar shows a summary of the alarm information in the active alarms tab.
 
@@ -121,6 +119,7 @@ For spectrum analyzer cards (available from DataMiner 9.5.5 onwards):
 - These cards can display a spectrum trace in SVG format if WebSockets have been enabled (via the user icon \> *Settings*).
 
   > [!NOTE]
+  >
   > - WebSockets also need to be enabled on the server and client machine for this to work. In addition, the server requires at least Microsoft .NET Framework 4.5.
   > - WebSockets are automatically enabled from DataMiner 9.6.5 onwards.
 

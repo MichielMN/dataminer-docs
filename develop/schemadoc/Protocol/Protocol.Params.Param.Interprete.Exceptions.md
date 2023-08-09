@@ -12,7 +12,7 @@ Contains Exception elements, each representing a different exceptional state.
 
 ## Children
 
-|Name|Occurrences|Description|
+|Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Occurrences|Description|
 |--- |--- |--- |
 |&nbsp;&nbsp;[Exception](xref:Protocol.Params.Param.Interprete.Exceptions.Exception)|[0, *]|Defines an exception for an exception value you want to intercept of which the Interprete.Type is identical to that of the parameter in question.|
 
@@ -34,8 +34,8 @@ Contains Exception elements, each representing a different exceptional state.
 ```xml
 <Exceptions>
 	<Exception id="1" value="0">
-	<Display state="disabled">Not Found</Display>
-	<Value>0</Value>
+		<Display state="disabled">Not Found</Display>
+		<Value>0</Value>
 	</Exception>
 </Exceptions>
 ```

@@ -2,7 +2,7 @@
 uid: Configuration_of_DataMiner_processes
 ---
 
-# Configuration of DataMiner processes
+# Configuring DataMiner processes
 
 ## Setting the number of simultaneously running SLPort processes
 
@@ -100,6 +100,9 @@ To have separate SLScripting processes created for every protocol being used, do
    </DataMiner>
    ```
 
+   > [!NOTE]
+   > If scriptingProcesses is set to "protocol", an SLScripting process is initialized for every SLProtocol process (see [Configuring a separate SLScripting process for each SLProtocol process](#configuring-a-separate-slscripting-process-for-each-slprotocol-process)). As an SLProtocol process is used for every protocol when protocolProcesses is set to "protocol", combining these two attributes effectively initializes a separate SLScripting process for every protocol.
+
 1. Save *C:\\Skyline Dataminer\\DataMiner.xml.*
 
 1. Restart the DataMiner software.
@@ -170,6 +173,7 @@ To configure this:
 1. Restart the DataMiner software.
 
 > [!NOTE]
+>
 > - A separate SLScripting process must be launched for every SLProtocol process. This means that when at least one protocol name is specified in the *SeparateProcesses* tag, the configuration of the *scriptingProcesses* attribute will be overridden to "protocol", except if it is set to "\[Service]" (see [Running SLScripting as a service](#running-slscripting-as-a-service)). Configuring separate SLProtocol and SLScripting instances for a protocol is not compatible with a configuration where SLScripting is configured as a service. If you do configure both of these options, the configuration to run separate SLProtocol and SLScripting instances will be ignored, and a notice alarm will be generated with more information.
 > - DataMiner.xml files are not synchronized in a DMS. If your DMS consists of multiple DMAs, you will need to edit the DataMiner.xml file on each of the DMAs.
 
@@ -192,6 +196,35 @@ To do so:
   ...
 </DataMiner>
 ```
+
+## Setting the number of simultaneously running SLScripting processes
+
+From DataMiner 10.2.7/10.3.0 onwards, the number of simultaneously running SLScripting processes can be set in the *\<ProcessOptions>* tag of the *DataMiner.xml* file.
+
+1. Stop the DataMiner software.
+
+1. Open the file *C:\\Skyline Dataminer\\DataMiner.xml.*
+
+1. In the *\<ProcessOptions>* tag, set the *scriptingProcesses* attribute to the desired number. For example:
+
+   ```xml
+   <DataMiner>
+     <ProcessOptions protocolProcesses="5" scriptingProcesses="3" />
+   </DataMiner>
+   ```
+
+1. Save *C:\\Skyline Dataminer\\DataMiner.xml.*
+
+1. Restart the DataMiner software.
+
+> [!NOTE]
+> The SLProtocol processes will be assigned one of the available SLScripting processes in a round-robin way. For example, if protocolProcesses is set to 5 (i.e. the default value), and scriptingProcesses is set to 3:
+>
+> - SLScripting 1 will host SLProtocol #1 and #4
+> - SLScripting 2 will host SLProtocol #2 and #5
+> - SLScripting 3 will host SLProtocol #3
+>
+> Assigning more SLScripting processes than SLProtocol processes will give every SLProtocol process its own instance without launching additional SLScripting processes.
 
 ## Running SLScripting as a service
 
@@ -240,6 +273,9 @@ By default, the SLScripting process runs as a server. However, in some cases, it
 ## SLWatchdog
 
 On a DataMiner Agent, the SLWatchdog process continuously monitors all other DataMiner processes. When it detects some kind of problem with one of those processes, it takes action.
+
+> [!CAUTION]
+> SLWatchdog must never be started or restarted manually when DataMiner is running. Doing so may have unintended consequences as it guards the DataMiner processes.
 
 ### When will SLWatchdog take action?
 
@@ -292,7 +328,7 @@ In the file *MaintenanceSettings.xml*, you can specify a number of SLWatchdog se
 1. Restart the DataMiner Agent.
 
 > [!TIP]
-> See also: [MaintenanceSettings.xml](xref:MaintenanceSettings_xml#maintenancesettingsxml)
+> See also: [MaintenanceSettings.xml](xref:MaintenanceSettings_xml)
 
 ### Example of an SLWatchdog tag in MaintenanceSettings.xml
 
@@ -340,7 +376,7 @@ The following table contains all information about the different SLWatchdog sett
 ## Configuring SLNet settings in MaintenanceSettings.xml
 
 > [!TIP]
-> See also: [MaintenanceSettings.xml](xref:MaintenanceSettings_xml#maintenancesettingsxml)
+> See also: [MaintenanceSettings.xml](xref:MaintenanceSettings_xml)
 
 > [!NOTE]
 > Before you configure any of these settings, you will need to stop DataMiner. After you have saved your changes, restart DataMiner again.
@@ -416,6 +452,7 @@ Example:
 ```
 
 > [!NOTE]
+>
 > - When a single polling response is not able to empty the stack of queued messages on the server, the next polling request will be scheduled after 100ms (fixed value).
 > - Unzipping/unpacking polling response data on the client can be done while another polling request is already in progress.
 
@@ -462,7 +499,7 @@ Example:
 Default: FALSE
 
 > [!NOTE]
-> This setting can also be configured with the SLNetClientTest tool. However, note that this is an advanced administration tool that should be used with extreme care. See [Making DataMiner Cube ignore view updates](xref:SLNetClientTest_tool_advanced_procedures#making-dataminer-cube-ignore-view-updates).
+> This setting can also be configured with the SLNetClientTest tool. However, note that this is an advanced administration tool that should be used with extreme care. See [Making DataMiner Cube ignore view updates](xref:SLNetClientTest_making_Cube_ignore_view_updates).
 
 ### Specifying DCF settings
 
@@ -543,9 +580,9 @@ Example:
 
 ### Generating information events when a connection fails to authenticate
 
-From DataMiner 9.0.0 CU9 onwards, an option can be configured to have an information event generated whenever a connection fails to be authenticated.
+It is possible to have an information event generated whenever a connection fails to be authenticated. From DataMiner 10.1.8/10.2.0 onwards, this is enabled by default.
 
-To enable this option, add an *\<EnableFailedAuthenticationInfoEvents>* tag in the *\<SLNet>* section of the *MaintenanceSettings.xml* file, and set this tag to “true”. From DataMiner 10.1.8/10.2.0 onwards, this option is set to “true” by default.
+To enable this option in older systems, add an *\<EnableFailedAuthenticationInfoEvents>* tag in the *\<SLNet>* section of the *MaintenanceSettings.xml* file, and set this tag to “true”.
 
 Example:
 
@@ -583,7 +620,7 @@ Example:
 
 From DataMiner 10.1.0/10.1.1 onwards, DataMiner processes use the NATS open-source messaging system to communicate with each other. Some settings for NATS can be fine-tuned in *MaintenanceSettings.xml*, using the following tags:
 
-- *NATSDisasterCheck*: Set this to true or false in order to respectively activate or deactivate automatic detection and triggering of NATS cluster self healing (default: false).
+- *NATSDisasterCheck*: Set this to true or false in order to respectively activate or deactivate automatic detection and triggering of NATS cluster self-healing (default: false).
 
 - *NATSResetWindow*: Specify a value in seconds to set a window during which only one NATS reset can occur. This prevents situations where NATS disaster recovery is triggered too often. The minimum value is 60. If a lower value is specified, 60 will be used instead.
 
@@ -609,7 +646,7 @@ Example:
 ```
 
 > [!NOTE]
-> From DataMiner 10.1.0/10.1.3 onwards, you can instead configure this using the SLNetClientTest tool. See [Fine-tuning NATS settings](xref:SLNetClientTest_tool_advanced_procedures#fine-tuning-nats-settings).
+> From DataMiner 10.1.0/10.1.3 onwards, you can instead configure this using the SLNetClientTest tool. See [Fine-tuning NATS settings](xref:SLNetClientTest_finetuning_nats_settings).
 
 > [!TIP]
 > See also: [Increasing the timeout for the NATS connection](xref:SLCloud_xml#increasing-the-timeout-for-the-nats-connection)
@@ -639,11 +676,57 @@ Example:
 </MaintenanceSettings>
 ```
 
-## Configuring DMA communication settings in SLNet.exe.config
+### Customizing how long a connection ticket remains valid
 
-On a DMA, you have to specify the ports to be used for both .NET Remoting and XML Web Services.
+When establishing a new connection (e.g. using the DataMiner Web Services), SLNet makes use of a ticket for authentication. The *AuthenticationTicketExpirationTime* setting in *MaintenanceSettings.xml* determines how long this ticket remains valid. If a request for a new connection is made after the specified time has elapsed, the system will consider the request invalid.
 
-1. On the DataMiner Agent on which you want to configure the communication settings, go to the *C:\\Skyline DataMiner\\Files* directory.
+By default, this is set to 30 seconds.
+
+Example:
+
+```xml
+<MaintenanceSettings>
+  ...
+  <SLNet>
+    ...
+    <AuthenticationTicketExpirationTime>30</AuthenticationTicketExpirationTime>
+    ...
+  </SLNet>
+  ...
+</MaintenanceSettings>
+```
+
+> [!NOTE]
+> Within the SLNet element in *MaintenanceSettings.xml*, there is also a *TicketExpirationTime* setting. This determines the duration (in seconds) that a ticket used to perform privileged instructions remains valid (default value: 300 seconds). This is for instance used to grant a user permission to start DataMiner. If a request for the privileged instruction is made after the specified time period has passed, the system considers the ticket invalid and denies the request.
+
+### Disabling .NET Remoting
+
+By default, .NET Remoting is used for communication between DMAs. From DataMiner 10.3.2/10.3.0 onwards, a gRPC connection can be used instead. To make gRPC the default for communication between DMAs, you can either [add Redirect tags in DMS.xml](xref:DMS_xml#redirects-subtag), or disable .NET Remoting in *MaintenanceSettings.xml*. However, note that the latter is **only recommended from DataMiner 10.3.6/10.3.0 [CU3] onwards**, as prior to this there is no support for DataMiner upgrades over gRPC.
+
+To do the latter, add an *\<EnableDotNetRemoting>* tag in the *\<SLNet>* section of the *MaintenanceSettings.xml* file, and set this tag to “false”.<!-- RN 31498+36023 -->
+
+Example:
+
+```xml
+<MaintenanceSettings>
+  ...
+  <SLNet>
+    ...
+    <EnableDotNetRemoting>false</EnableDotNetRemoting>
+    ...
+  </SLNet>
+  ...
+</MaintenanceSettings>
+```
+
+> [!IMPORTANT]
+> Make sure this is configured the same way for all Agents in a DMS.
+
+## Configuring the ports for .NET Remoting and/or XML Web Services
+
+On a DMA, you can specify the ports to be used for both .NET Remoting and (for legacy DMAs) XML Web Services.
+
+1. On the DataMiner Agent on which you want to configure these settings, go to the *C:\\Skyline DataMiner\\Files* directory.
 
 1. In a text editor (e.g. Microsoft Notepad), open *SLNet.exe.config*.
 

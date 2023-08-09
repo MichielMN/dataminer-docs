@@ -121,7 +121,8 @@ namespace Skyline.DataMiner.Automation
 		/// <note type="note">
 		/// <para>When a scheduled task, a Correlation rule, or a redundancy group trigger a script to execute, this TriggeredByName will be filled in with "Scheduled task [name task]", "Correlation-rule [name rule]", or "Redundancy", respectively.</para>
 		/// </note>
-		/// </remarks>	
+		/// <para>Feature introduced in DataMiner 10.2.6/10.3.0 (RN 33122).</para>
+		/// </remarks>
 		/// <example>
 		/// <code>
 		/// engine.Log(engine.TriggeredByName);
@@ -965,6 +966,11 @@ namespace Skyline.DataMiner.Automation
 		public IConnection GetUserConnection() { return null; }
 
 
+		/// <summary>
+		/// Resets the timeout timer, extending the time the Automation script is allowed to execute.
+		/// The time can be specified via the <see cref="Timeout"/> property.
+		/// </summary>
+		/// <remarks>When a script reaches the timeout, a <see cref="ScriptTimeoutException"/> will be thrown to stop the execution.</remarks>
 		public void KeepAlive() { }
 
 		/// <summary>
@@ -1425,6 +1431,15 @@ namespace Skyline.DataMiner.Automation
 		/// engine.ShowProgress(progress);
 		/// </code>
 		/// </example>
+		/// <remarks>
+                /// ShowProgress displays a message in a dialog with the name of the script as title. If you want the dialog to have a custom title you can use the UIBuilder:
+		/// <code> UIBuilder uibDialogBox = new UIBuilder();
+                /// uibDialogBox.Title = "My custom title";
+                /// uibDialogBox.Append("Session is successfully booked.");
+                /// engine.ShowUI(uibDialogBox);
+		/// </code>
+		/// <seealso cref="ShowUI"/>
+                ///</remarks>
 		public void ShowProgress(string uiData) { }
 
 		/// <summary>

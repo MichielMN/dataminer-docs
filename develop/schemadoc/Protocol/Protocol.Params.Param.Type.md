@@ -16,7 +16,7 @@ Specifies the parameter type.
 
 ## Attributes
 
-|Name|Type|Required|Description|
+|Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Type|Required|Description|
 |--- |--- |--- |--- |
 |[alarmRegistration](xref:Protocol.Params.Param.Type-alarmRegistration)|string||Allows to trigger a QAction when specific parameters go into alarm.|
 |[distribution](xref:Protocol.Params.Param.Type-distribution)|string||Used in situations in which elements of a certain type are linked to each other as parent and child.|
@@ -67,9 +67,9 @@ A parameter of type DATAMINER INFO will contain the following data separated by 
 - Primary IP address
 - Secondary IP address
 
-Parameters of type ELEMENTID, ELEMENTNAME, ELEMENTDMAID and DATAMINER INFO are the first parameters that are loaded by a protocol. Although they hold information, they cannot, as such, be displayed on the DMS Element Display. Therefore, for these types of parameters, always set the Protocol.Params.Param.Display.RTDisplay tag to FALSE.
+Parameters of type ELEMENTID, ELEMENTNAME, ELEMENTDMAID and DATAMINER INFO are the first parameters that are loaded by a protocol. Although they hold information, they cannot, as such, be displayed in the user interface. Therefore, for these types of parameters, always set the Protocol.Params.Param.Display.RTDisplay tag to FALSE.
 
-If you do want to display the information in one of these parameters on the DMS Element Display, there is a workaround: create another parameter of type READ, and copy the value from its invisible parameter to this new parameter after protocol startup. You can then display the READ parameter on the DMS Element Display.
+If you do want to display the information in one of these parameters in the user interface, there is a workaround: create another parameter of type READ, and copy the value from its invisible parameter to this new parameter after protocol startup. You can then display the READ parameter in the user interface.
 
 ### discreet info
 
@@ -144,12 +144,6 @@ A GROUP parameter contains one or more bytes from which one or more bits will be
 
 Header and trailer parameters can be defined to allow DataMiner to easily detect beginning and end of a frame. If, for example, the first byte of every frame is the hexadecimal symbol 0x02, you can create a header parameter and define it as “0x02”.
 
-### length
-
-Length parameters are used to hold the length of a frame used in a communication session. While often calculated based on the total frame, this length is sometimes also calculated based on a part of the frame.
-
-To hold the correct length, the number of parameters on which the length will be calculated must be defined in the LENGTH parameter.
-
 ### ip
 
 A parameter of type IP will contain the IP address and IP port, separated by ”:”.
@@ -157,6 +151,21 @@ A parameter of type IP will contain the IP address and IP port, separated by ”
 Multiple address/port combination will be separated by semicolons (”;”).
 
 `<Type>IP</Type>` can result in “10.12.230.326:80” or “localhost:80”
+
+### length
+
+Length parameters are used to hold the length of a frame used in a communication session. While often calculated based on the total frame, this length is sometimes also calculated based on a part of the frame.
+
+To hold the correct length, the number of parameters on which the length will be calculated must be defined in the LENGTH parameter.
+
+### matrix
+
+With this parameter, matrix mappings are configured for each table. This is done in the *Param.Matrix* element.
+
+See also:
+
+- [Table-based matrix](xref:UIComponentsTableMatrix)
+- [Matrix element](xref:Protocol.Params.Param.Matrix)
 
 ### pollingip
 

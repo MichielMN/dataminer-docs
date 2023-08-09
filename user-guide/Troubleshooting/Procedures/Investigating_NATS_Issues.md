@@ -2,7 +2,7 @@
 uid: Investigating_NATS_Issues
 ---
 
-# Investigating NATS Issues
+# Investigating NATS issues
 
 To investigate NATS issues, follow the actions detailed below, in the specified order:
 
@@ -14,7 +14,9 @@ To investigate NATS issues, follow the actions detailed below, in the specified 
 1. [Try a NATS reset](#try-a-nats-reset)
 1. [Check if new NATS connections can be established](#check-if-new-nats-connections-can-be-established)
 1. [Check the NAS and NATS logging](#check-the-nas-and-nats-logging)
+1. [Check if port is already in use](#check-if-port-is-already-in-use)
 1. [Remaining steps](#remaining-steps)
+
 
 It may also be useful to understand the [algorithms used by DataMiner to configure NATS](#algorithms-used-by-dataminer-to-configure-nats).
 
@@ -90,7 +92,10 @@ Double-check the status of NAS ([NATS Account Server](https://github.com/nats-io
 
 There is no case where NAS or NATS are stopped on purpose. However, it can occur that NATS is stuck in the "stopping" state and *nats-streaming-server.exe* has to be manually killed in order for the process to be able to restore itself.
 
-If you see that NAS is running but NATS is not, the most likely cause is a **firewall issue**. When NATS is installed, entries are automatically added to the Windows Firewall, but if there is an additional firewall in between the DMAs in a DMS, the rules need to be added/modified manually. The ports that need to be opened are **4222** (NATS communication), **6222** (NATS clustering) and **9090** (NAS). These ports need to be opened between all DMAs. Port 8222 is also used, but for monitoring only, so this port does not have to be opened in the firewall.
+If you see that NAS is running but NATS is not, the most likely cause is a **firewall issue**. When NATS is installed, entries are automatically added to the Windows Firewall, but if there is an additional firewall in between the DMAs in a DMS, the rules need to be added/modified manually. The ports that need to be opened are **4222** (NATS communication), **6222** (NATS clustering), and **9090** (NAS). These ports need to be opened between all DMAs. Port 8222 is also used, but for monitoring only, so this port does not have to be opened in the firewall.
+
+> [!NOTE]
+> The mentioned ports should be opened in the firewall as an inbound rule with the "All" profile. This means that if you go to *Properties* > *Advanced* > *Profiles* for the firewall rule, all checkboxes (*Domain*, *Private*, and *Public*) should be selected.
 
 Typically, in case of a firewall issue, if you check the *nats-account-server.log* file in the folder `C:\Skyline DataMiner\NATS\nats-account-server\` of the DMA where NATS does not start, you will see a message like this near the top of the file: "*Unable to initialize from primary, will use what is on disk*".
 
@@ -144,9 +149,11 @@ streaming: {
     dir: "C:\\Skyline DataMiner\\NATS\\nats-streaming-server\\fileStore"
 }
 cluster: {
+    name: DMS # Same on each node. Does not need to be the same as streaming.cluster_id
     routes: ["nats://10.10.73.10:6222/","nats://10.10.73.20:6222/"]
     listen: 0.0.0.0:6222
 }
+server_name: MyServerName # Unique on each node
 ```
 
 The following values can vary in each DMS:
@@ -182,6 +189,7 @@ streaming: {
     }
     credentials: "C:\\Skyline DataMiner\\NATS\\nsc\\.nkeys\\creds\\DataMinerOperator\\DataMinerAccount\\DataMinerUser.creds" # Credentials file to connect to external NATS 2.0+ Server
 }
+server_name: MyServerName
 ```
   
 The only difference between this config and a config of an Agent that has a standalone NATS is that the resolver is different from 0.0.0.0.
@@ -213,7 +221,18 @@ streaming: {
     }
     credentials: "C:\\Skyline DataMiner\\NATS\\nsc\\.nkeys\\creds\\DataMinerOperator\\DataMinerAccount\\DataMinerUser.creds" # Credentials file to connect to external NATS 2.0+ Server
 }
+server_name: MyServerName
 ```  
+
+> [!NOTE]
+> - From DataMiner 10.1.0 \[CU12]/10.2.3 onwards, STAN is no longer used by the core processes because of performance issues. The streaming configuration can therefore be simplified as follows:
+>
+> ```txt
+> streaming: {
+>    cluster_id: SomeName # Unique on each node
+>    credentials: "C:\\Skyline DataMiner\\NATS\\nsc\\.nkeys\\creds\\DataMinerOperator\\DataMinerAccount\\DataMinerUser.creds" # Credentials file to connect to external NATS 2.0+ Server
+> }
+> ```
 
 ### nas.config
 
@@ -293,6 +312,67 @@ For example, in a cluster of 4 agents, the following situation could occur:
 
 This will result in Agent 2 receiving different information about the same cluster from its peers. Because Agent 2 cannot resolve this, it will shut itself down, without stating a particular reason for doing so. This makes it look like Agent 2 is the one experiencing issues because it is the only one where NATS will not start. However, it is in fact the only server where all the connections are working correctly.
 
+## Check if port is already in use
+
+NATS uses port 9090 by default. If another program is already using this port, you will notice the following behavior:
+
+- DataMiner fails to start.
+
+- NAS is running.
+
+- NATS is stopped.
+
+- Several 2kB large log files can be found in the *C:\Skyline DataMiner\NATS\nats-account-server* folder.
+
+  > [!NOTE]
+  > The number of log files in this folder can increase rapidly (over 30,000 files in 12 hours).
+
+  The log files contain the following entry:
+
+  `listen tcp 0.0.0.0:9090: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.`
+
+The 9090 port may already be in use if your DMA has elements using [GPIB communication](xref:GPIB_Connection) and you have the [Keysight Connection Expert software](xref:Installing_the_Keysight_Agilent_IO_Libraries) from IO Libraries installed. This is commonly the case for [spectrum analyzer elements](xref:Connecting_spectrum_analyzers_to_your_DataMiner_System).
+
+Check whether Keysight Agilent IO Libraries or a different third-party software is using the 9090 port:
+
+1. Ensure that NAS and NATS are stopped.
+
+1. Run the following command in a command prompt window: `netstat -aon | findstr 9090`.
+
+1. If you identify a process using port 9090, open Windows Task Manager to find the process PID, e.g. *kdi-controller.exe*.
+
+### Manually configuring a custom port for NATS
+
+To resolve this issue, manually configure a custom port for NATS that is not yet in use, e.g. port 9091.
+
+1. Stop DataMiner and the NAS and NATS services.
+
+1. Make sure SLWatchdog is stopped.
+
+1. Open *C:\Skyline DataMiner\NATS\nats-account-server\nas.config* and change the port from 9090 to your chosen custom port, e.g. 9091.
+
+1. Run the following command in a command prompt window: `nssm edit NAS`.
+
+1. Change any mentions of 9090 to 9091.
+
+1. Open *C:\Skyline DataMiner\NATS\nats-streaming-server\nats-server.config* and change the port from 9090 to 9091.
+
+1. In Windows Firewall, locate the inbound rule for NAS. Change the port from 9090 to 9091.
+
+1. Open *C:\Skyline DataMiner\MaintenanceSettings.xml* and add the following lines:
+
+   ```xml
+   <SLNet>
+   <NATSForceManualConfig>true</NATSForceManualConfig>
+   </SLNet>
+   ```
+
+1. Start the NAS and NATS services.
+
+1. Start DataMiner.
+
+1. Repeat this process for every Agent in the cluster.
+
 ## Remaining steps
 
 If you continue to have NATS issues, try the following steps:
@@ -301,13 +381,13 @@ If you continue to have NATS issues, try the following steps:
 
 1. Open a command window as Administrator.
 
-1. Navigate to `C:\Skyline DataMiner\Files` and run SLEndpointTool_Console.exe.
+1. Navigate to `C:\Skyline DataMiner\Files` and run .\SLEndpointTool_Console.exe.
 
 1. Uninstall NAS
 
    ```cmd
    CMD
-   C:\Skyline DataMiner\Files>SLEndpointTool_Console.exe
+   C:\Skyline DataMiner\Files>.\SLEndpointTool_Console.exe
    Install or Uninstall? (I/U): U
    You have chosen to Uninstall
    Root installation directory? (Empty for default):
@@ -326,7 +406,7 @@ If you continue to have NATS issues, try the following steps:
 
    ```cmd
    CMD
-   C:\Skyline DataMiner\Files>SLEndpointTool_Console.exe
+   C:\Skyline DataMiner\Files>.\SLEndpointTool_Console.exe
    Install or Uninstall? (I/U): I
    You have chosen to Install
    Root installation directory? (Empty for default):
@@ -360,7 +440,7 @@ First, the algorithm will collect all the reachable primary IPs in the cluster (
 
 - If only 1 reachable IP is found and the local system is NOT in a Failover setup, the config will be reverted to the “standalone” config. This is the same as the default config when first installing NATS. The algorithm exits after this. Otherwise, it will sort all the nodes by IP (sortedNodes).
 
-- If only 2 nodes are found, a special algorithm will be run designed for 2 nodes only. It will first reset both nodes to the standalone configuration. Then it will select the node with the lowest IP address and configure that one as “master” and the other as “guest”. The master node will be left as the default config, while the guest node will be configured to use NATS and NAS from the master node. This means that the guest node will still be running the NAS and NATS service, but the DataMiner Agent will never connect to it; it will always connect with the NATS of the master node. This is needed because a cluster of exactly 2 NATS nodes is impossible. This can be a vulnerability on systems that run a standalone Failover setup. If the master node goes down for any reason, the guest node will no longer be able to use NATS either.
+- If only 2 nodes are found, a special algorithm will be run designed for 2 nodes only. It will first reset both nodes to the standalone configuration. Then it will select the node with the alphabetically first IP address or hostname and configure that one as “master” and the other as “guest”. The master node will be left as the default config, while the guest node will be configured to use NATS and NAS from the master node. This means that the guest node will still be running the NAS and NATS service, but the DataMiner Agent will never connect to it; it will always connect with the NATS of the master node. This is needed because a cluster of exactly 2 NATS nodes is impossible. This can be a vulnerability on systems that run a standalone Failover setup. If the master node goes down for any reason, the guest node will no longer be able to use NATS either.
 
 - If 3 or more nodes are detected, the algorithm will cluster them all together.
 
@@ -370,7 +450,7 @@ First, the algorithm will collect all the reachable primary IPs in the cluster (
 
   1. The filestore and raft logging are cleaned up (`..\NATS\nats-streaming-server\fileStore` and `..\NATS\nats-streaming-server\raftLog`). This is done to remove any references and cached data from the previous cluster configuration.
 
-  1. The lowest IP is selected to become the primary NAS; all the other nodes are configured as a secondary NAS and will reference the primary NAS.
+  1. The alphabetically first IP or hostname is selected to become the primary NAS; all the other nodes are configured as a secondary NAS and will reference the primary NAS.
 
   1. The cluster ID is set using the DMS cluster name, transformed to Base64 string. This transformation is done to prevent special symbols in the cluster ID.
 
