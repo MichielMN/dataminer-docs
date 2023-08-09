@@ -199,6 +199,28 @@ As from DataMiner 10.2.0/10.2.1, it is recommended to create Enterprise Applicat
 
 In Azure AD, the ipMetadata URL can be found under *Single sign-on > SAML Signing Certificate – App Federation Metadata Url*.
 
+Optional: Verify the IPMetadata signature
+
+As of Dataminer [Version] it is possible to verify the signatuer of Azure identity provider's metadata as an added security measure.
+
+1. To do this extend the <ExternalAuthentication> tag as follows:
+
+   ```xml
+   <DataMiner ...>
+     ...
+     <ExternalAuthentication
+       type="SAML"
+       ipMetadata="[Path/URL of the identity provider’s metadata file]"
+       spMetadata="[Path/URL of the service provider’s metadata file]"
+       timeout="300"
+       *WantIpMetaDataSigned="true"*/>
+     ...
+   </DataMiner>
+   ```
+1. To download the certificate open your Azure Enterprise application and go to Single Sign on > SAML Certificates > Edit > open the 3 dot menu of the Active certificate > Base64 Certificate Download
+   
+1. Install the certificate to the Trusted Root Certification Authorities
+
 #### Configuring DataMiner to import users and groups from Azure AD
 
 Once you have established a trust relationship between DataMiner (i.e. the service provider) and Azure AD (i.e. the identity provider), you can also configure DataMiner to import users and user groups from Azure AD. To do so, proceed as follows.
